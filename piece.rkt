@@ -8,7 +8,6 @@
   [white chess-color?]
   [black chess-color?]
   [chess-piece? predicate/c]
-  [chess-pieces (set/c chess-piece?)]
   [uncolored-chess-piece? predicate/c]
   [uncolored-chess-pieces (set/c uncolored-chess-piece?)]
   [pawn uncolored-chess-piece?]
@@ -30,7 +29,10 @@
   [black-rook colored-chess-piece?]
   [black-queen colored-chess-piece?]
   [black-king colored-chess-piece?]
-  [colored-chess-piece-color (-> colored-chess-piece? chess-color?)]
+  [colored-chess-piece
+   (-> #:type uncolored-chess-piece? #:owner chess-color? colored-chess-piece?)]
+  [colored-chess-piece-type (-> colored-chess-piece? uncolored-chess-piece?)]
+  [colored-chess-piece-owner (-> colored-chess-piece? chess-color?)]
   [colored-chess-pieces (set/c colored-chess-piece?)]))
   
 
@@ -58,12 +60,12 @@
 (define uncolored-chess-pieces (set pawn knight bishop rook queen king))
 (define (uncolored-chess-piece? v) (set-member? uncolored-chess-pieces v))
 
-(define-record-type colored-chess-piece (type color))
+(define-record-type colored-chess-piece (type owner))
 
 (splicing-local
     ;; Local helpers to make the following definitions easy to read
-    [(define (white! piece) (colored-chess-piece #:type piece #:color white))
-     (define (black! piece) (colored-chess-piece #:type piece #:color black))]
+    [(define (white! piece) (colored-chess-piece #:type piece #:owner white))
+     (define (black! piece) (colored-chess-piece #:type piece #:owner black))]
   (define white-pawn (white! pawn))
   (define white-knight (white! knight))
   (define white-bishop (white! bishop))
@@ -80,7 +82,7 @@
 (define colored-chess-pieces
   (for*/set ([color (in-immutable-set chess-colors)]
              [piece (in-immutable-set uncolored-chess-pieces)])
-    (colored-chess-piece #:type piece #:color color)))
+    (colored-chess-piece #:type piece #:owner color)))
 
 (define chess-pieces (set-union colored-chess-pieces uncolored-chess-pieces))
 (define (chess-piece? v) (set-member? chess-pieces v))

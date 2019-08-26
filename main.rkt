@@ -92,7 +92,7 @@
 (module+ test
   (test-case "square occupation"
     (for* ([sq (in-squares)]
-           [piece (in-immutable-set chess-pieces)])
+           [piece (in-immutable-set colored-chess-pieces)])
       (check-equal? (square-unoccupy (square-occupy sq piece)) sq))))
 
 ;@------------------------------------------------------------------------------
