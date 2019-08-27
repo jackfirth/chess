@@ -8,10 +8,12 @@
                      pict
                      racket/base
                      racket/contract/base
+                     racket/sequence
                      racket/set
                      rebellion/streaming/reducer)
           (submod chess/private/scribble-evaluator-factory doc)
-          scribble/example)
+          scribble/example
+          syntax/parse/define)
 
 @(define make-evaluator
    (make-module-sharing-evaluator-factory
@@ -20,11 +22,17 @@
                    'rebellion/streaming/reducer)
     #:private (list 'racket/base)))
 
+@(define-simple-macro
+   @defthingstogether[[id:id ...] #:contract contract:expr pre-flow ...]
+   @deftogether[[@defthing[id contract] ...] pre-flow ...])
+
 @title{Chess}
 @defmodule[chess]
 
 This library provides several functions and data structures for representing and
 playing the game of chess.
+
+@table-of-contents[]
 
 @section{Chess Pieces and Colors}
 @defmodule[chess/piece]
@@ -39,47 +47,30 @@ come in two flavors:
  @item{An @deftech{uncolored chess piece} isn't associated with any player, and
   only represents a type of piece.}]
 
-A @deftech{chess color} is either @racket[white] or @racket[black].
-
-@defproc[(chess-color? [v any/c]) boolean?]{
- A predicate for @tech{chess colors}.}
-
-@deftogether[[
- @defthing[white chess-color?]
- @defthing[black chess-color?]]]{
- Constants representing the two @tech{chess colors}.}
-
 @defproc[(chess-piece? [v any/c]) boolean?]{
  A predicate for @tech{chess pieces}.}
+
+@subsection{Uncolored Chess Pieces}
 
 @defproc[(uncolored-chess-piece? [v any/c]) boolean?]{
  A predicate for @tech{uncolored chess pieces}. Implies @racket[chess-piece?].}
 
-@deftogether[[
- @defthing[pawn uncolored-chess-piece?]
- @defthing[knight uncolored-chess-piece?]
- @defthing[bishop uncolored-chess-piece?]
- @defthing[rook uncolored-chess-piece?]
- @defthing[queen uncolored-chess-piece?]
- @defthing[king uncolored-chess-piece?]]]{
+@defthingstogether[
+ [pawn knight bishop rook queen king] #:contract uncolored-chess-piece?]{
  Constants representing @tech{uncolored chess pieces}.}
+
+@defthing[uncolored-chess-pieces (set/c uncolored-chess-piece?)]{
+ An immutable set of all possible @tech{uncolored chess pieces}.}
+
+@subsection{Colored Chess Pieces}
 
 @defproc[(colored-chess-piece? [v any/c]) boolean?]{
  A predicate for @tech{colored chess pieces}. Implies @racket[chess-piece?].}
 
-@deftogether[[
- @defthing[white-pawn colored-chess-piece?]
- @defthing[white-knight colored-chess-piece?]
- @defthing[white-bishop colored-chess-piece?]
- @defthing[white-rook colored-chess-piece?]
- @defthing[white-queen colored-chess-piece?]
- @defthing[white-king colored-chess-piece?]
- @defthing[black-pawn colored-chess-piece?]
- @defthing[black-knight colored-chess-piece?]
- @defthing[black-bishop colored-chess-piece?]
- @defthing[black-rook colored-chess-piece?]
- @defthing[black-queen colored-chess-piece?]
- @defthing[black-king colored-chess-piece?]]]{
+@defthingstogether[
+ [white-pawn white-knight white-bishop white-rook white-queen white-king
+  black-pawn black-knight black-bishop black-rook black-queen black-king]
+ #:contract colored-chess-piece?]{
  Constants representing @tech{colored chess pieces}.}
 
 @defproc[(colored-chess-piece [#:type type uncolored-chess-piece?]
@@ -107,11 +98,18 @@ A @deftech{chess color} is either @racket[white] or @racket[black].
    #:eval (make-evaluator) #:once
    (colored-chess-piece-owner white-queen))}
 
-@defthing[uncolored-chess-pieces (set/c uncolored-chess-piece?)]{
- An immutable set of all possible @tech{uncolored chess pieces}.}
-
 @defthing[colored-chess-pieces (set/c colored-chess-piece?)]{
  An immutable set of all possible @tech{colored chess pieces}.}
+
+@subsection{Chess Colors}
+
+A @deftech{chess color} is either @racket[white] or @racket[black].
+
+@defproc[(chess-color? [v any/c]) boolean?]{
+ A predicate for @tech{chess colors}.}
+
+@defthingstogether[[white black] #:contract chess-color?]{
+ Constants representing the two @tech{chess colors}.}
 
 @section{Chess Boards}
 @defmodule[chess/board]
@@ -212,10 +210,10 @@ on its position:
  @racket[file].}
 
 @defproc[(chess-square-rank [square chess-square?]) chess-rank?]{
- Returns the @tech{rank} of @racket[square].}
+ Returns the @tech{chess rank} of @racket[square].}
 
 @defproc[(chess-square-file [square chess-square?]) chess-file?]{
- Returns the @tech{file} of @racket[square].}
+ Returns the @tech{chess file} of @racket[square].}
 
 @subsection{Occupied Chess Squares}
 
@@ -278,6 +276,20 @@ Construct one with @racket[chess-square-occupy].
  Returns a sequence of all @tech{chess files}. If @racket[right-to-left?] is
  true, the files are listed from right to left (from the H file to the A file).
  Otherwise, they are listed from left to right.}
+
+@subsection{Chess Square Constants}
+
+@defthingstogether[
+ [a1 a2 a3 a4 a5 a6 a7 a8
+  b1 b2 b3 b4 b5 b6 b7 b8
+  c1 c2 c3 c4 c5 c6 c7 c8
+  d1 d2 d3 d4 d5 d6 d7 d8
+  e1 e2 e3 e4 e5 e6 e7 e8
+  f1 f2 f3 f4 f5 f6 f7 f8
+  g1 g2 g3 g4 g5 g6 g7 g8
+  h1 h2 h3 h4 h5 h6 h7 h8]
+ #:contract chess-square?]{
+ Constants for each @tech{chess square}.}
 
 @section{Chess Pictures}
 @defmodule[chess/pict]
