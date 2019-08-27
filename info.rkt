@@ -11,9 +11,11 @@
 (define deps
   (list "base"
         "pict-lib"
-        "rebellion"))
+        "rebellion"
+        "reprovide-lang"))
 
 (define build-deps
-  (list "racket-doc"
+  (list "pict-doc"
+        "racket-doc"
         "rackunit-lib"
         "scribble-lib"))
