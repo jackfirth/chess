@@ -4,7 +4,7 @@
 
 (define scribblings
   (list (list "main.scrbl"
-              (list)
+              (list 'multi-page)
               (list "Chess")
               "chess")))
 
