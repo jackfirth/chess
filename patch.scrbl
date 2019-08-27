@@ -6,7 +6,8 @@
                      chess/square
                      racket/base
                      racket/contract/base
-                     racket/set)
+                     racket/set
+                     rebellion/base/result)
           (submod chess/private/scribble-evaluator-factory doc)
           scribble/example)
 
