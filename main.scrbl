@@ -13,4 +13,5 @@ playing the game of chess.
 @include-section[(lib "chess/piece.scrbl")]
 @include-section[(lib "chess/board.scrbl")]
 @include-section[(lib "chess/square.scrbl")]
+@include-section[(lib "chess/patch.scrbl")]
 @include-section[(lib "chess/pict.scrbl")]
