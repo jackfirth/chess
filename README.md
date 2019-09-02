@@ -1,4 +1,4 @@
-# rebellion [![CI Status][ci-status-badge]][ci-status] [![Documentation][docs-badge]][docs]
+# chess [![CI Status][ci-status-badge]][ci-status] [![Documentation][docs-badge]][docs]
 
 A Racket package for playing chess.
 
