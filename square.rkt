@@ -98,7 +98,7 @@
     (define rank (chess-rank-index (accessor this rank-field)))
     (define file (chess-file-index (accessor this file-field)))
     (format-symbol "~a~a" (immutable-string-ref "abcdefgh" file) (add1 rank)))
-  (list (cons prop:equal+hash (make-record-equal+hash descriptor))
+  (list (cons prop:equal+hash (default-record-equal+hash descriptor))
         (cons prop:custom-write custom-write)
         (cons prop:object-name object-name)))
 
