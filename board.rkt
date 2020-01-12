@@ -38,10 +38,10 @@
 ;@------------------------------------------------------------------------------
 ;; Chess boards
 
-(define-record-type chess-board (squares) #:constructor-name make-chess-board)
+(define-record-type chess-board (squares) #:omit-root-binding)
 
 (define empty-chess-board
-  (make-chess-board #:squares (make-immutable-vector 64 #f)))
+  (constructor:chess-board #:squares (make-immutable-vector 64 #f)))
 
 (define (chess-square->board-index sq)
   (+ (* (chess-rank-index (chess-square-rank sq)) 8)
@@ -66,7 +66,7 @@
 (define into-chess-board
   (reducer-map (slots-into-vector #:size 64 #:default #f)
                #:domain occupied-chess-square->slot
-               #:range (λ (vec) (make-chess-board #:squares vec))))
+               #:range (λ (vec) (constructor:chess-board #:squares vec))))
 
 (define (chess-board . squares+pieces)
   (for/reducer into-chess-board

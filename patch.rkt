@@ -45,7 +45,7 @@
 
 (define-record-type chess-patch
   (placements removals captures obstruction-checks safety-checks)
-  #:constructor-name constructor:chess-patch)
+  #:omit-root-binding)
 
 (define (chess-patch #:placements [placements (hash)]
                      #:removals [removals (hash)]
